@@ -23,8 +23,8 @@ class MainActivity : AppCompatActivity() {
 
         // Consumer
         GlobalScope.launch {
-            flow.buffer().filter {
-                it % 2 != 0
+            flow.buffer().map {
+                it * it
             }
                     .collect {
                 println(it)
