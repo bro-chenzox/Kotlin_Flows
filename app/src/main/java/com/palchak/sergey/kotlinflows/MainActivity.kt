@@ -4,8 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -16,15 +16,19 @@ class MainActivity : AppCompatActivity() {
         // Producer
         val flow = flow {
             for (i in 1..10) {
-                emit("Hello World!")
+                emit(i)
                 delay(1000)
             }
         }
 
         // Consumer
         GlobalScope.launch {
-            flow.collect {
+            flow.buffer().filter {
+                it % 2 != 0
+            }
+                    .collect {
                 println(it)
+                delay(2000)
             }
         }
     }
